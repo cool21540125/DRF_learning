@@ -1,0 +1,4 @@
+ve/
+.vscode/
+__pycache__/
+migrations/
