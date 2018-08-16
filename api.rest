@@ -19,3 +19,6 @@ GET {{baseURL}}/users/
 ### 可刪...
 # DELETE {{baseURL}}/users/5/
 
+
+### 
+GET {{baseURL}}/
