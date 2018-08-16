@@ -1,0 +1,21 @@
+
+@baseURL=http://localhost:8000
+
+###
+GET {{baseURL}}/users/
+
+
+### 405 "detail": "Method \"POST\" not allowed."
+# POST {{baseURL}}/users/6/
+# Content-Type: application/json
+
+# {
+#     "username": "sdgf",
+#     "email": "",
+#     "groups": []
+# }
+
+
+### 可刪...
+# DELETE {{baseURL}}/users/5/
+
