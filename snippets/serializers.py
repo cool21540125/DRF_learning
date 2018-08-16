@@ -5,10 +5,14 @@ from rest_framework import serializers
 from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 
 
-class SnippetSerializer(serializers.Serializer):
+class SnippetSerializer(serializers.ModelSerializer):
     """
-        SnippetSerializer
+        SnippetSerializer 改成 serializers.ModelSerializer
     """
+    class Meta:     # 改成 ModelSerializer 需要定義 Meta (資料結構吧?!)
+        model = Snippet
+        fields = '__all__'
+
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(required=False, allow_blank=True, max_length=100)
     code = serializers.CharField(style={'base_template': 'textarea.html'})

@@ -145,3 +145,32 @@ Snippet.objects.all()
 ss1.data
 # [OrderedDict([('id', 1), ('title', ''), ('code', 'Hello'), ('linenos', False), ('language', 'python'), ('style', 'friendly')])]
 ```
+
+
+`serializers.Serializer` 改成 `serializers.ModelSerializer`
+
+```py
+# snippets/serializers.py
+class SnippetSerializer(serializers.ModelSerializer):   # 
+    
+    class Meta:     # 改成 ModelSerializer 需要定義 Meta (資料結構吧?!)
+        model = Snippet
+        fields = '__all__'
+
+    # 其餘一樣
+```
+
+改完後重新進入 Shell
+```py
+# python manage.py shell
+from snippets.serializers import SnippetSerializer
+s= SnippetSerializer()
+print(s)
+# id = IntegerField(read_only=True)
+# title = CharField(allow_blank=True, max_length=100, required=False)
+# code = CharField(style={'base_template': 'textarea.html'})
+# linenos = BooleanField(required=False)
+# language = ChoiceField(choices=[('abap', 'ABAP'), ('abnf', 'ABNF'), ...], default='python')
+# style = ChoiceField(choices=[('abap', 'abap'), ('algol', 'algol'), ...], default='friendly')
+# created = DateTimeField(read_only=True)       # serializers.Serializer 無此欄位
+```
