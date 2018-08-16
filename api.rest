@@ -20,5 +20,33 @@ GET {{baseURL}}/users/
 # DELETE {{baseURL}}/users/5/
 
 
-### 
-GET {{baseURL}}/
+### 查詢 [snippets]
+GET {{baseURL}}/snippets/
+
+
+### 新增 snippets
+POST {{baseURL}}/snippets/
+Content-Type: application/json
+
+{
+    "code": "TEST11"
+}
+
+
+### 查詢 snippets
+GET {{baseURL}}/snippets/2/
+
+
+### 修改 snippets
+PUT {{baseURL}}/snippets/2/
+Content-Type: application/json
+
+{
+    "title": "new~",
+    "code": "Hello"
+}
+
+
+### 刪除 snippets
+DELETE {{baseURL}}/snippets/5/
+

@@ -149,6 +149,11 @@ ss1.data
 
 `serializers.Serializer` 改成 `serializers.ModelSerializer`
 
+    使用 serializers.ModelSerializer 取代 serializers.Serializer (兩者皆為 Form 的概念)
+    而 ModelSerializer 直接給定 Meta , 
+    1. 直接套用 models 定義好的 schema 來當作 metadata
+    2. 預設實作了簡單版的 create() 及 update()
+
 ```py
 # snippets/serializers.py
 class SnippetSerializer(serializers.ModelSerializer):   # 

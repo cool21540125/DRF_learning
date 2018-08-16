@@ -23,6 +23,7 @@ RT.register(r'users', views.UserViewSet)
 RT.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
-    url(r'^api/$', include(RT.urls)),
+    url(r'^', include(RT.urls)),
+    url(r'^', include('snippets.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
