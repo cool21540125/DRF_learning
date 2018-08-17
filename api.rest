@@ -2,7 +2,7 @@
 @baseURL=http://localhost:8000
 
 ###
-GET {{baseURL}}/users/
+GET {{baseURL}}/api/users/
 
 
 ### 405 "detail": "Method \"POST\" not allowed."
@@ -21,11 +21,18 @@ GET {{baseURL}}/users/
 
 
 ### 查詢 [snippets]
-GET {{baseURL}}/snippets/
+GET {{baseURL}}/api/snippets/
+Accept: text/html
+# Accpet: text/html
+# Accept: application/json
+
+
+### 查詢 [snippets]
+GET {{baseURL}}/api/snippets/
 
 
 ### 新增 snippets
-POST {{baseURL}}/snippets/
+POST {{baseURL}}/api/snippets/
 Content-Type: application/json
 
 {
@@ -34,11 +41,11 @@ Content-Type: application/json
 
 
 ### 查詢 snippets
-GET {{baseURL}}/snippets/2/
+GET {{baseURL}}/api/snippets/2/
 
 
 ### 修改 snippets
-PUT {{baseURL}}/snippets/2/
+PUT {{baseURL}}/api/snippets/2/
 Content-Type: application/json
 
 {
@@ -48,5 +55,5 @@ Content-Type: application/json
 
 
 ### 刪除 snippets
-DELETE {{baseURL}}/snippets/5/
+DELETE {{baseURL}}/api/snippets/5/
 

@@ -1,55 +1,55 @@
 """
     最一開始的 API View
 """
-from django.http import HttpResponse
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
+from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def snippet_list(request):
+@api_view(['GET', 'POST'])
+def snippet_list(request, format=None):
     """
         List 所有 code snippets / create
     """
     if request.method == 'GET':
         objs = Snippet.objects.all()
         sers = SnippetSerializer(objs, many=True)
-        return JsonResponse(sers.data, safe=False)
+        return Response(sers.data)
 
     if request.method == 'POST':
-        data = JSONParser().parse(request)
-        sers = SnippetSerializer(data=data)
+        sers = SnippetSerializer(data=request.data)
         if sers.is_valid():
             sers.save()
-            return JsonResponse(sers.data, status=201)
-        return JsonResponse(sers.errors, status=400)
+            return Response(sers.data, status=status.HTTP_201_CREATED)
+        return Response(sers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt
-def snippet_detail(request, pk):
+@api_view(['GET', 'PUT', 'DELETE'])
+def snippet_detail(request, pk, format=None):
     """
         取, 刪, 改
     """
     try:
         obj = Snippet.objects.get(pk=pk)
     except Snippet.DoesNotExist:
-        return HttpResponse(status=404)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         ser = SnippetSerializer(obj)
-        return JsonResponse(ser.data)
+        return Response(ser.data)
 
     if request.method == 'PUT':
-        data = JSONParser().parse(request)
-        ser = SnippetSerializer(obj, data=data)
+        ser = SnippetSerializer(obj, data=request.data)
         if ser.is_valid():
             ser.save()
-            return JsonResponse(ser.data)
-        return JsonResponse(ser.errors, status=400)
+            return Response(ser.data)
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'DELETE':
         obj.delete()
-        return HttpResponse(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)

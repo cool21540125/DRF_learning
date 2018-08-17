@@ -179,3 +179,81 @@ print(s)
 # style = ChoiceField(choices=[('abap', 'abap'), ('algol', 'algol'), ...], default='friendly')
 # created = DateTimeField(read_only=True)       # serializers.Serializer 無此欄位
 ```
+
+
+
+# Tutorial 2
+
+使用 API views 來包裹 
+1. `@api_view` decorator
+2. APIView class
+
+可以處理異常的請求資料 (用 `request.data` 解析 `request body` ), 錯誤會回傳 `ParseError` ; 解除強制回應成 JSON type, `JsonResponse(...)` 改成 `Response(...)`, 回應格是會依照 `content negotiation` 來作處理.
+
+```py
+# 去改 snippets/views
+# page Ch2 - p2/6, p3/6
+```
+
+```py
+"""
+    proj.urls.py
+"""
+from django.conf.urls import url, include
+
+
+urlpatterns = [
+    url(r'^api/', include('snippets.urls')),
+]
+
+
+"""
+    snippets.urls.py
+"""
+from django.conf.urls import url
+from rest_framework.urlpatterns import format_suffix_patterns
+from snippets import views
+
+urlpatterns = [
+    url(r'^snippets/$', views.snippet_list),
+    url(r'^snippets/(?P<pk>[0-9]+)/$', views.snippet_detail),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+```
+
+
+```sh
+# 可改變請求類型, 乃至於其他後端開放的 content negotiation 的 data type.
+# http://localhost:8000/api/snippets.api/
+# http://localhost:8000/api/snippets.json/
+```
+
+
+
+# 好用套件
+
+- [DRF-auto API doc](https://github.com/iMakedonsky/drf-autodocs)
+
+```sh
+pip install drf_autodocs
+```
+
+```py
+# settings.py
+INSTALLED_APPS = [
+    ...
+    'drf_autodocs',
+    ...
+]
+
+# project.urls.py
+urlpatterns = [
+    ...
+    url(r'^', include('drf_autodocs.urls')),
+]
+```
+
+localhost:8000/docs/
+
+目前看不出效果=..=
