@@ -109,8 +109,10 @@ from snippets.serializers import SnippetSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-sni1 = Snippet(code='Hello')
+sni1 = Snippet(id='1', code='Hello')
+sni2 = Snippet(id='2', code='Hi')
 sni1.save()
+sni2.save()
 
 ser1 = SnippetSerializer(sni1)
 ser2 = SnippetSerializer(sni2)
@@ -257,3 +259,65 @@ urlpatterns = [
 localhost:8000/docs/
 
 目前看不出效果=..=
+
+
+# Tutorial 3
+
+PASS
+
+
+
+# Tutorial 4 - Authentication & Permissions
+
+```py
+# 增加到 snippets/models.py 的 Snippet
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
+
+class Snippet(models.Model):
+    # ...
+    ### 多此 2 屬性
+    owner = models.ForeignKey('auth.User', related_name='Snippets', on_delete=models.CASCADE)
+    highlighted = models.TextField()
+
+    ### 多此方法
+    def save(self, *args, **kwargs):
+        """
+            用 pygments 建立 highlighted HTML -> code snippet
+        """
+        lexer = get_lexer_by_name(self.language)
+        linenos = 'table' if self.linenos else False
+        options = {'title': self.title} if self.title else {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos, full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(Snippet, self).save(*args, **kwargs)
+```
+
+之後更新資料庫, 為了方便操作
+1. Drop DB
+2. Drop snippets/migrations
+3. `python manage.py makemigrations snippets`    產生 snippets/migrations & Table:django_migrations
+4. `python manage.py migrate`                   產生其他相關 tables
+
+
+```py
+# python manage.py shell
+## 重創
+from snippets.models import Snippet
+from snippets.serializers import SnippetSerializer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+sni1 = Snippet(id='1', code='Hello', owner_id=1)
+sni2 = Snippet(id='2', code='Python Code', owner_id=1)
+sni3 = Snippet(id='3', language='java', code='Java', owner_id=2)
+
+sni1.save()
+sni2.save()
+sni3.save()
+
+ser1 = SnippetSerializer(sni1)
+ser2 = SnippetSerializer(sni2)
+ser3 = SnippetSerializer(sni3)
+```

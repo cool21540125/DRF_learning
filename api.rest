@@ -22,7 +22,7 @@ Content-Type: application/json
 
 
 ### 查詢 snippets
-GET {{baseURL}}/api/snippets/10/
+GET {{baseURL}}/api/snippets/3/
 
 
 ### 修改 snippets
@@ -36,5 +36,5 @@ Content-Type: application/json
 
 
 ### 刪除 snippets
-DELETE {{baseURL}}/api/snippets/10/
+DELETE {{baseURL}}/api/snippets/3/
 

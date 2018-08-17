@@ -1,18 +1,35 @@
 """
-    SnippetSerializer
+    Tutorial 4 Auth
 """
+from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    """
+        Tutorial4 auth
+        多個 snippets 被同一個 User 建立
+    """
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'groups', 'snippets',)
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    """
+        User Group
+    """
+    class Meta:
+        model = Group
+        fields = ('name',)
 
 
 class SnippetSerializer(serializers.ModelSerializer):
     """
         SnippetSerializer 改成 serializers.ModelSerializer
     """
-    class Meta:     # 改成 ModelSerializer 需要定義 Meta (資料結構吧?!)
-        model = Snippet
-        fields = '__all__'
-
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(required=False, allow_blank=True, max_length=100)
     code = serializers.CharField(style={'base_template': 'textarea.html'})
@@ -20,14 +37,6 @@ class SnippetSerializer(serializers.ModelSerializer):
     language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default='python')
     style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
 
-    # def create(self, validated_data):
-    #     return Snippet.objects.create(**validated_data)
-
-    # def update(self, instance, validated_data):
-    #     instance.title = validated_data.get('title', instance.title)
-    #     instance.code = validated_data.get('code', instance.code)
-    #     instance.linenos = validated_data.get('linenos', instance.linenos)
-    #     instance.language = validated_data.get('language', instance.language)
-    #     instance.style = validated_data.get('style', instance.style)
-    #     instance.save()
-    #     return instance
+    class Meta:     # 改成 ModelSerializer 需要定義 Meta (資料結構吧?!)
+        model = Snippet
+        fields = '__all__'
