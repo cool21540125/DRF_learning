@@ -22,19 +22,19 @@ Content-Type: application/json
 
 
 ### 查詢 snippets
-GET {{baseURL}}/api/snippets/2/
+GET {{baseURL}}/api/snippets/10/
 
 
 ### 修改 snippets
-PUT {{baseURL}}/api/snippets/2/
+PUT {{baseURL}}/api/snippets/10/
 Content-Type: application/json
 
 {
     "title": "new~",
-    "code": "Hello"
+    "code": "Hel@@lo"
 }
 
 
 ### 刪除 snippets
-DELETE {{baseURL}}/api/snippets/7/
+DELETE {{baseURL}}/api/snippets/10/
 
