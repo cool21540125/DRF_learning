@@ -1,34 +1,15 @@
 
 @baseURL=http://localhost:8000
 
-###
-GET {{baseURL}}/api/users/
-
-
-### 405 "detail": "Method \"POST\" not allowed."
-# POST {{baseURL}}/users/6/
-# Content-Type: application/json
-
-# {
-#     "username": "sdgf",
-#     "email": "",
-#     "groups": []
-# }
-
-
-### 可刪...
-# DELETE {{baseURL}}/users/5/
-
-
 ### 查詢 [snippets]
 GET {{baseURL}}/api/snippets/
-Accept: text/html
+Accept: application/json
 # Accpet: text/html
 # Accept: application/json
 
 
 ### 查詢 [snippets]
-GET {{baseURL}}/api/snippets/
+GET {{baseURL}}/api/snippets.json/
 
 
 ### 新增 snippets
@@ -55,5 +36,5 @@ Content-Type: application/json
 
 
 ### 刪除 snippets
-DELETE {{baseURL}}/api/snippets/5/
+DELETE {{baseURL}}/api/snippets/7/
 

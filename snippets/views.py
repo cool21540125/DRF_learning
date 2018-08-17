@@ -1,26 +1,25 @@
 """
     最一開始的 API View
 """
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView # from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
+from django.views.decorators.csrf import csrf_exempt
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
-from django.views.decorators.csrf import csrf_exempt
 
 
-@csrf_exempt
-@api_view(['GET', 'POST'])
-def snippet_list(request, format=None):
+class SnippetList(APIView):
     """
-        List 所有 code snippets / create
+        all snippets
     """
-    if request.method == 'GET':
+    def get(self, request, format=None):
         objs = Snippet.objects.all()
         sers = SnippetSerializer(objs, many=True)
         return Response(sers.data)
 
-    if request.method == 'POST':
+    def post(self, request, format=None):
         sers = SnippetSerializer(data=request.data)
         if sers.is_valid():
             sers.save()
@@ -28,28 +27,30 @@ def snippet_list(request, format=None):
         return Response(sers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-@api_view(['GET', 'PUT', 'DELETE'])
-def snippet_detail(request, pk, format=None):
+class SnippetDetail(APIView):
     """
         取, 刪, 改
     """
-    try:
-        obj = Snippet.objects.get(pk=pk)
-    except Snippet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    def __get_object(self, pk):
+        try:
+            return Snippet.objects.get(pk=pk)
+        except Snippet.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, pk, format=None):
+        obj = self.__get_object(pk)
         ser = SnippetSerializer(obj)
         return Response(ser.data)
 
-    if request.method == 'PUT':
+    def put(self, request, pk, format=None):
+        obj = self.__get_object(pk)
         ser = SnippetSerializer(obj, data=request.data)
         if ser.is_valid():
             ser.save()
             return Response(ser.data)
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'DELETE':
+    def delete(self, request, pk, format=None):
+        obj = self.__get_object(pk)
         obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
