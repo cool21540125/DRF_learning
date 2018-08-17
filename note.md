@@ -321,4 +321,7 @@ sni3.save()
 ser1 = SnippetSerializer(sni1)
 ser2 = SnippetSerializer(sni2)
 ser3 = SnippetSerializer(sni3)
+
 ```
+
+2018/08/17 `Snippet` 和 `User` 增刪改都有 欄位 & 權限 的 bug

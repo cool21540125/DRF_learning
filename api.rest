@@ -1,6 +1,8 @@
 
 @baseURL=http://localhost:8000
 
+###################### Snippets #######################
+
 ### 查詢 [snippets]
 GET {{baseURL}}/api/snippets/
 Accept: application/json
@@ -17,17 +19,22 @@ POST {{baseURL}}/api/snippets/
 Content-Type: application/json
 
 {
-    "code": "TEST11"
+    "id": 5,
+    "code": "Hi",
+    "language": "python",
+    "highlighted": "<h1>test</h1>"
 }
 
 
 ### 查詢 snippets
-GET {{baseURL}}/api/snippets/3/
+GET {{baseURL}}/api/snippets/1/
+Authorization: Basic admin password123
 
 
 ### 修改 snippets
-PUT {{baseURL}}/api/snippets/10/
+PUT {{baseURL}}/api/snippets/1/
 Content-Type: application/json
+Authorization: Basic admin password123
 
 {
     "title": "new~",
@@ -38,3 +45,28 @@ Content-Type: application/json
 ### 刪除 snippets
 DELETE {{baseURL}}/api/snippets/3/
 
+
+###################### User #######################
+
+### 查 [User]
+GET {{baseURL}}/api/users/
+
+### 增 User
+POST {{baseURL}}/api/users/
+Content-Type: application/json
+Authorization: Basic admin password123
+
+{
+    "username": "tony2",
+    "password": "asdfjkl;",
+    "snippets": "",
+}
+
+### 查 User
+GET {{baseURL}}/api/users/3/ HTTP/1.1
+Authorization: Basic admin password123
+
+
+### 刪 User
+DELETE {{baseURL}}/api/users/3/
+Authorization: Basic admin password123

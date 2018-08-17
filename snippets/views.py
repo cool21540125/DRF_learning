@@ -2,13 +2,14 @@
     最一開始的 API View
 """
 from rest_framework import generics
+from rest_framework import permissions
 from django.contrib.auth.models import User
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
 from snippets.serializers import UserSerializer
+from snippets.permissions import IsOwnerOrReadOnly
 
-
-class SnippetList(generics.ListAPIView):
+class SnippetList(generics.ListCreateAPIView):
     """
         all snippets
     """
@@ -22,9 +23,9 @@ class SnippetDetail(generics.RetrieveAPIView):
     """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-
-class UserList(generics.ListAPIView):
+class UserList(generics.ListCreateAPIView):
     """
         All Users
     """
@@ -32,9 +33,10 @@ class UserList(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     """
         First Users
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAdminUser,)

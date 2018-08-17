@@ -1,4 +1,6 @@
+# pylint: disable=W0221
 """
+    https://github.com/PyCQA/pylint-django/issues/94   <- pylint: disable=W0221
     Snippet
 """
 from django.db import models
@@ -24,13 +26,16 @@ class Snippet(models.Model):
     linenos = models.BooleanField(default=False)
     language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
-    owner = models.ForeignKey('auth.User', related_name='Snippets', on_delete=models.CASCADE)
+    owner = models.ForeignKey('auth.User', related_name='snippets', on_delete=models.CASCADE)
     highlighted = models.TextField()
 
+    class Meta:
+        ordering = ('created',)
+
     def save(self, *args, **kwargs):
-        """
+        '''
             用 pygments 建立 highlighted HTML -> code snippet
-        """
+        '''
         lexer = get_lexer_by_name(self.language)
         linenos = 'table' if self.linenos else False
         options = {'title': self.title} if self.title else {}

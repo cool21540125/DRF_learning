@@ -14,7 +14,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'groups', 'snippets',)
+        fields = ('id', 'username', 'email', 'snippets',)
+        # fields = '__all__'
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,7 +37,8 @@ class SnippetSerializer(serializers.ModelSerializer):
     linenos = serializers.BooleanField(required=False)
     language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default='python')
     style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
+    owner = serializers.ReadOnlyField(source='owner.username')
 
-    class Meta:     # 改成 ModelSerializer 需要定義 Meta (資料結構吧?!)
+    class Meta:
         model = Snippet
         fields = '__all__'
